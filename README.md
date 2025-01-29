@@ -129,7 +129,7 @@
 - [x] Ground place added (dark mode theme)
 - [x] Basic game loop with state management (menu to game)
 - [x] Error handling and logging integration
-- [ ] Player movement mechanics
+- [x] Player movement mechanics
 - [ ] Obstacle implementation
 - [ ] Reward system
 - [ ] Difficulty scaling
