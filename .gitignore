@@ -2,4 +2,4 @@
 __pycache__/
 
 # Ignore application error log
-*game.log
+game.log
