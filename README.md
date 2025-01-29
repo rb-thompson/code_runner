@@ -8,13 +8,15 @@
 ## Phase 1: Planning and Design
 
 **Tasks**:
-- **Concept Sketching**: Sketch out all of the game layout, obstacles, and rewards. Use tools like Adobe XD or Figma.
+- **Concept Sketching**: 
+    - Sketch out all of the game layout, obstacles, and rewards. Use tools like Adobe XD or Figma.
 - **Game Mechanics**: 
     - Define mechanics for movement, collision detection, scoring, and life management.
     - Plan how difficulty increases over time (e.g., more obstacles, faster movement)
 - **User Interface (UI) Design**:
     - Design the start menu, game over screen, and high score display.
-- **DB Design**: Decide on a simple SQLite database for storing high scores.
+- **DB Design**: 
+    - Decide on a simple SQLite database for storing high scores.
 
 **Resources Needed**:
 - Design software.
@@ -26,7 +28,7 @@
 - **Choose Game Engine/Framework**:
     - Pygame for Python due to its simplicity for 2D games.
 - **Environment Setup**:
-    - Pythono 3.x, Pygame, SQLite 3.
+    - Pythono 3.12.1, Pygame 2.6.1, SQLite 3.
 - **Version Control**:
     - Hosted on GitHub.
 
@@ -70,7 +72,8 @@
 ## Phase 6: Testing
 
 **Tasks**:
-- **Unit Testing**: Test individual components like collision detection, scoring, etc.
+- **Unit Testing**: 
+    - Test individual components like collision detection, scoring, etc.
 - **Play Testing**:
     - Conduct sessions with friends or online communities for feedback.
     - Iterate based on feedback for bug fixes and gameplay balance.
@@ -81,7 +84,8 @@
 ## Phase 7: Deployment
 
 **Tasks**:
-- **Packaging**: Create an executable for Windows or a setup for other platforms if needed.
+- **Packaging**: 
+    - Create an executable for Windows or a setup for other platforms if needed.
 - **Documentation**: 
     - Write a README with installation instructions, controls, and game objectives.
 - **Distribution**:

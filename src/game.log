@@ -1,0 +1,3 @@
+2025-01-29 03:04:29,946 - src.runner - INFO - Initializing GameRun
+2025-01-29 03:04:30,161 - src.runner - INFO - Starting main game loop
+2025-01-29 03:04:36,369 - src.runner - INFO - Cleaning up GameRun
