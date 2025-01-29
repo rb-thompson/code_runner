@@ -109,3 +109,54 @@
 
 - **Legal**: Ensure all assets used are either original, free to use, or properly licensed.
 - **Community**: Engage with coding or gaming communities for support and feedback.
+
+## Progress
+
+**PHASE 1: PLANNING & DESIGN**
+[x] Concept sketching
+[x] Game mechanics definitions
+[x] UI design
+[x] Database design
+
+**PHASE 2: DEV SETUP**
+[x] Python and Pygame installation 
+[x] Project structure setup
+[x] Version control setup
+
+**PHASE 3: CORE GAME DEV**
+[x] Main menu implementation
+[x] Player avatar placeholder (fixed position)
+[x] Ground place added (dark mode theme)
+[x] Basic game loop with state management (menu to game)
+[x] Error handling and logging integration
+[ ] Player movement mechanics
+[ ] Obstacle implementation
+[ ] Reward system
+[ ] Difficulty scaling
+[ ] Collision detection
+[ ] Game over condition
+
+**PHASE 4: DB INTEGRATION**
+[ ] SQLite setup
+[ ] High score saving mechanism
+[ ] High score retrieval and display
+
+**PHASE 5: UI & UX**
+[ ] Main menu screen
+[ ] Game screen UI (health, experience, coins, score)
+[ ] Game over screen
+[ ] Sound effects
+
+**PHASE 6: TESTING**
+[ ] Unit testing of game components
+[ ] Play testing sessions
+[ ] Feedback implementation
+
+**PHASE 7: DEPLOY**
+[ ] Game packaging
+[ ] Ducumentation creation
+[ ] Distribution setup (GitHub, itch.io, etc)
+
+**PHASE 8: MAINT. & UPDATES**
+[ ] Bug fixes
+[ ] Features updates
