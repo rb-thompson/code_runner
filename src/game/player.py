@@ -101,6 +101,8 @@ class Player(pygame.sprite.Sprite):
     def jump(self):
         if self.is_on_ground_or_platform():
             self.velocity_y = self.jump_strength
+            # Emit smoke particles at the player's feet when jumping
+            self.game_state.player_jumped(self)
 
     def is_on_ground_or_platform(self):
         # Check if on ground

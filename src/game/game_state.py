@@ -1,6 +1,7 @@
 import pygame
 import random
 from .player import Player
+from .particle import Particle
 from .background import Background
 from .platform import Platform
 from ..configs import *
@@ -15,11 +16,13 @@ class GameState:
         self.background = Background()
         self.player.health = 100
         self.last_platform = None
+        self.particles = pygame.sprite.Group()
 
     def update(self):
         self.all_sprites.update()
         self.background.update()
         self.generate_platforms()
+        self.particles.update()
 
     def generate_platforms(self):
         if not self.platforms or self.platforms.sprites()[-1].rect.right < SCREEN_WIDTH - 600:
@@ -51,6 +54,22 @@ class GameState:
         self.background.draw(screen)
         pygame.draw.rect(screen, GROUND_COLOR, (0, SCREEN_HEIGHT - GROUND_HEIGHT, SCREEN_WIDTH, GROUND_HEIGHT))
         self.all_sprites.draw(screen)
-        for platform in self.platforms:
-            pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
-            pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
+        self.particles.draw(screen)
+        # DEBUG: Activate hitboxes for troubleshooting and testing
+        # for platform in self.platforms:
+        #     pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
+        #     pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
+
+    # Particle emitter
+    def emit_particles(self, pos, particle_type, colors=None, size_range=(5, 10), count=10):
+        for _ in range(count):
+            particle = Particle(pos, particle_type, colors=colors, size_range=size_range)
+            self.particles.add(particle)
+            self.all_sprites.add(particle)
+
+    # Example method to use particles, say when the player jumps
+    def player_jumped(self, player):
+        self.emit_particles(self.player.rect.center, 'smoke', 
+                    colors=[(105, 252, 83), (83, 244, 252), (83, 252, 142)], 
+                    size_range=(1, 5), 
+                    count=20)
