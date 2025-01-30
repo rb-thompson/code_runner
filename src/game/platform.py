@@ -7,7 +7,7 @@ class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, speed=1):
         super().__init__()
         self.image = pygame.Surface([width, height], pygame.SRCALPHA)
-        self.image.fill((200, 200, 200, 128))  # ARGB: A=128 for 50% opacity
+        self.image.fill((255, 255, 255))  # ARGB: A=128 for 50% opacity
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

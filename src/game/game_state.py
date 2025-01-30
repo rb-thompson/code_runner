@@ -2,6 +2,7 @@ import pygame
 import random
 from .player import Player
 from .particle import Particle
+from ..gui.status_bar import StatusBar
 from .background import Background
 from .platform import Platform
 from ..configs import *
@@ -14,6 +15,7 @@ class GameState:
         self.player = Player(0, SCREEN_HEIGHT - PLAYER_HEIGHT - GROUND_HEIGHT, self)
         self.all_sprites.add(self.player)
         self.background = Background()
+        self.status_bar = StatusBar(self.player)
         self.player.health = 100
         self.last_platform = None
         self.particles = pygame.sprite.Group()
@@ -55,6 +57,7 @@ class GameState:
         pygame.draw.rect(screen, GROUND_COLOR, (0, SCREEN_HEIGHT - GROUND_HEIGHT, SCREEN_WIDTH, GROUND_HEIGHT))
         self.all_sprites.draw(screen)
         self.particles.draw(screen)
+        self.status_bar.draw(screen)
         # DEBUG: Activate hitboxes for troubleshooting and testing
         # for platform in self.platforms:
         #     pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
@@ -70,6 +73,6 @@ class GameState:
     # Example method to use particles, say when the player jumps
     def player_jumped(self, player):
         self.emit_particles(self.player.rect.center, 'smoke', 
-                    colors=[(105, 252, 83), (83, 244, 252), (83, 252, 142)], 
+                    colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
                     size_range=(1, 5), 
                     count=20)

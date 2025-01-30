@@ -19,11 +19,16 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
         self.counter = 0
 
+        # Player status
+        self.coins = 0
+        self.experience = 0  # Starts at 0, level calculation will be based on this
+        self.level = 1
+
         # Movement and physics
         self.velocity_y = 1       # Alters the hump height
         self.jump_strength = -25
         self.gravity = 1
-        self.speed = 5
+        self.speed = 10
 
         # Attack mechanics
         self.attacking = False
@@ -35,6 +40,21 @@ class Player(pygame.sprite.Sprite):
 
         # For flipping the sprite
         self.facing_right = True  # Assume player starts facing right
+
+    # New methods to manage coins and experience
+    def add_coins(self, amount):
+        self.coins += amount
+
+    def add_experience(self, amount):
+        self.experience += amount
+        self._update_level()
+
+    def _update_level(self):
+        # Simple level calculation. Adjust this formula as needed
+        new_level = int(self.experience ** 0.5) + 1  # Example: sqrt(exp) + 1 for level
+        if new_level > self.level:
+            self.level = new_level
+            print(f"Player leveled up to level {self.level}!")  # For debugging, replace with actual level up logic
 
     def load_images_from_sheet(self, sheet_path, rows, cols):
         sprite_sheet = pygame.image.load(sheet_path).convert_alpha()
@@ -76,7 +96,6 @@ class Player(pygame.sprite.Sprite):
         if not self.facing_right:
             self.image = pygame.transform.flip(self.image, True, False)  # Flip horizontally
         self.rect = self.image.get_rect(center=self.rect.center)  # Update rect to match new image
-
 
     def apply_physics(self):
         # Apply gravity and vertical movement regardless of attack state

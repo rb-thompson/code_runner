@@ -3,6 +3,7 @@ import pygame
 from src.configs import *
 from src.game.game_state import GameState
 from src.gui.main_menu import MainMenu
+from src.gui.pause_menu import PauseMenu
 from src.log_handler import get_logger
 
 logger = get_logger(__name__)
@@ -19,7 +20,9 @@ class GameRun:
         self.main_menu = MainMenu(self.screen)
         self.current_state = "menu"
         self.fps_clock = pygame.time.Clock()
-        self.fps_font = pygame.font.Font(None, 24)  # Moved font initialization here
+        self.fps_font = pygame.font.Font(None, 24)  
+        self.pause_menu = PauseMenu(self.screen)
+        self.paused = False
 
     def main(self):
         running = True
@@ -28,6 +31,9 @@ class GameRun:
             for event in events:
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                     running = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.paused = not self.paused  # Toggle pause
 
             if self.current_state == "menu":
                 for event in events:
@@ -35,23 +41,27 @@ class GameRun:
                         if event.key == pygame.K_SPACE:
                             self.current_state = "game"
             elif self.current_state == "game":
-                keys = pygame.key.get_pressed()  
-                if keys[pygame.K_LEFT]:
-                    self.game_state.player.move_left()
-                if keys[pygame.K_RIGHT]:
-                    self.game_state.player.move_right()
-                if keys[pygame.K_UP]:
-                    self.game_state.player.jump()
-                if keys[pygame.K_z]:
-                    self.game_state.player.attack()
+                if not self.paused:  # Only update game if not paused
+                    keys = pygame.key.get_pressed()  
+                    if keys[pygame.K_LEFT]:
+                        self.game_state.player.move_left()
+                    if keys[pygame.K_RIGHT]:
+                        self.game_state.player.move_right()
+                    if keys[pygame.K_UP]:
+                        self.game_state.player.jump()
+                    if keys[pygame.K_z]:
+                        self.game_state.player.attack()
 
-                self.game_state.handle_events(events)  # Handle other events like quitting
+                    self.game_state.handle_events(events)
+                    self.game_state.update()
 
+            # Drawing
             if self.current_state == "menu":
                 self.main_menu.draw()
             elif self.current_state == "game":
-                self.game_state.update()
-                self.game_state.draw(self.screen)
+                self.game_state.draw(self.screen)  # Draw the game state first
+                if self.paused:
+                    self.pause_menu.draw()  # Then draw pause menu over it
 
             # Calculate FPS
             fps = int(self.fps_clock.get_fps())
