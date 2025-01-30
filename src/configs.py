@@ -11,9 +11,11 @@ GROUND_COLOR = (50, 50, 50)      # Dark gray for the ground
 PLAYER_COLOR = (255, 255, 255)   # White for the player (placeholder)
 
 PLAYER_WIDTH = 150
-PLAYER_HEIGHT = 300
+PLAYER_HEIGHT = 200
 GROUND_HEIGHT = 50
 
+# Debug settings
+DEBUG = False  # Set to True to enable debug prints
 
 import os  # Import os at the end to avoid circular import issues
 
