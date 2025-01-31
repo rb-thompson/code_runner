@@ -176,7 +176,7 @@ code_runner/
 │   │   └── enemy.py
 │   │
 │   └── gui/
-│       ├── status_bar.py  # Renamed from statusbar.py
+│       ├── status_bar.py
 │       └── pause_menu.py
 │
 ├── assets/
