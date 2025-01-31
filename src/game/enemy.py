@@ -25,7 +25,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.type == 'code_bug':
             self.speed = 2
             self.health = 1  # Since they should be one-hitted, their health is 1
-            self.base_damage = 0  # You might want this to be 0 if you don't want bugs to damage the player
+            self.base_damage = 1  # You might want this to be 0 if you don't want bugs to damage the player
 
     def load_animations(self):
         animations = {}

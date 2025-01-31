@@ -121,4 +121,16 @@ class GameState:
                     colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
                     size_range=(1, 10), 
                     count=40)
+        self.player.add_experience(10)
         enemy.kill()  # Add this to remove the enemy from the game after the particle effect
+
+    def add_experience(self, amount):
+        self.experience += amount
+        self._update_level()
+
+    def _update_level(self):
+        # Simple level calculation. Adjust this formula as needed
+        new_level = int(self.experience ** 0.5) + 1  # Example: sqrt(exp) + 1 for level
+        if new_level > self.level:
+            self.level = new_level
+            print(f"Player leveled up to level {self.level}!")  # For debugging, replace with actual level up logic
