@@ -190,13 +190,16 @@ class Player(pygame.sprite.Sprite):
 
         # Check for enemy collisions
         for enemy in self.game_state.enemies:
-            if pygame.sprite.collide_rect(self, enemy):
-                # Player hits enemy
+            # Expand the player's attack range
+            attack_rect = self.rect.copy()
+            if self.facing_right:
+                attack_rect.right += ATTACK_RANGE_EXTENSION  # Example: Extend to the right
+            else:
+                attack_rect.left -= ATTACK_RANGE_EXTENSION  # Example: Extend to the left
+            
+            if attack_rect.colliderect(enemy.rect):
                 if self.attacking:
                     enemy.take_damage(self.base_damage)
-                # Enemy hits player
-                else:
-                    self.take_damage(enemy.base_damage)
         
         if DEBUG:
             print(f"Player pos after collision: {self.rect.x, self.rect.y}")

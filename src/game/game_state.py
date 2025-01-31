@@ -108,7 +108,7 @@ class GameState:
             self.particles.add(particle)
             self.all_sprites.add(particle)
 
-    # Example method to use particles, say when the player jumps
+    # Particle emitter methods for player/enemy actions
     def player_jumped(self, player):
         self.emit_particles(self.player.rect.center, 'smoke', 
                     colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
@@ -121,7 +121,7 @@ class GameState:
                     colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
                     size_range=(1, 10), 
                     count=40)
-        self.player.add_experience(10)
+        self.player.add_experience(5)
         enemy.kill()  # Add this to remove the enemy from the game after the particle effect
 
     def add_experience(self, amount):

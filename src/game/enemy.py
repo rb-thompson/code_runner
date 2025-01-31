@@ -15,15 +15,16 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.counter = 0
+        self.reaction_timer = 0   # Initialize reaction timer
 
-        self.speed = 2
+        self.speed = 3
         self.health = 1
-        self.move_direction = -1
+        self.move_direction = -1 
         self.base_damage = 1  # Set a base damage value for the enemy
         self.game_state = game_state
         
         if self.type == 'code_bug':
-            self.speed = 2
+            self.speed = 5
             self.health = 1  # Since they should be one-hitted, their health is 1
             self.base_damage = 1  # You might want this to be 0 if you don't want bugs to damage the player
 
@@ -54,6 +55,11 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         self.apply_animation()
         self.move()
+        if self.reaction_timer > 0:
+            self.reaction_timer -= 1
+        else:
+            # Check for player collision only if reaction time is over
+            self.check_player_collision(self.game_state.player)
 
     def apply_animation(self):
         SPEED = 10  # Adjust this to change animation speed
@@ -85,7 +91,8 @@ class Enemy(pygame.sprite.Sprite):
             self.game_state.enemy_defeated(self)
             self.kill()  # Enemy is defeated
 
-    # Handle enemy collision with player
     def check_player_collision(self, player):
         if pygame.sprite.collide_rect(self, player):
-            player.take_damage(self.base_damage)
+            if not self.game_state.player.attacking and self.reaction_timer == 0:
+                player.take_damage(self.base_damage)
+                self.reaction_timer = 60  # Delay
