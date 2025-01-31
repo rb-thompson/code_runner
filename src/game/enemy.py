@@ -4,7 +4,7 @@ import random
 from ..configs import *
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, x, y, enemy_type):
+    def __init__(self, x, y, enemy_type, game_state):
         super().__init__()
         self.type = enemy_type
         self.animations = self.load_animations()
@@ -19,10 +19,13 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 2
         self.health = 1
         self.move_direction = -1
+        self.base_damage = 1  # Set a base damage value for the enemy
+        self.game_state = game_state
         
         if self.type == 'code_bug':
             self.speed = 2
-            self.health = 1
+            self.health = 1  # Since they should be one-hitted, their health is 1
+            self.base_damage = 0  # You might want this to be 0 if you don't want bugs to damage the player
 
     def load_animations(self):
         animations = {}
@@ -79,4 +82,10 @@ class Enemy(pygame.sprite.Sprite):
     def take_damage(self, damage):
         self.health -= damage
         if self.health <= 0:
-            self.kill()
+            self.game_state.enemy_defeated(self)
+            self.kill()  # Enemy is defeated
+
+    # Handle enemy collision with player
+    def check_player_collision(self, player):
+        if pygame.sprite.collide_rect(self, player):
+            player.take_damage(self.base_damage)

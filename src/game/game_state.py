@@ -57,7 +57,7 @@ class GameState:
             # Spawn enemy at ground level
             x = SCREEN_WIDTH
             y = SCREEN_HEIGHT - GROUND_HEIGHT - ENEMY_HEIGHT  # Adjust based on enemy sprite height
-            enemy = Enemy(x, y, 'code_bug')
+            enemy = Enemy(x, y, 'code_bug', self)  # Pass self (GameState instance)
             self.enemies.add(enemy)
             self.all_sprites.add(enemy)
 
@@ -114,3 +114,11 @@ class GameState:
                     colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
                     size_range=(1, 5), 
                     count=20)
+        
+    def enemy_defeated(self, enemy):
+        print("Enemy health is <= 0, should trigger particles")
+        self.emit_particles(enemy.rect.center, 'smoke', 
+                    colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
+                    size_range=(1, 10), 
+                    count=40)
+        enemy.kill()  # Add this to remove the enemy from the game after the particle effect

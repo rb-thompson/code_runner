@@ -23,6 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.coins = 0
         self.experience = 0  # Starts at 0, level calculation will be based on this
         self.level = 1
+        self.base_damage = 1  # Set a base damage value for the player
 
         # Movement and physics
         self.velocity_y = 1       # Alters the hump height
@@ -148,15 +149,11 @@ class Player(pygame.sprite.Sprite):
 
     def attack(self):
         if not self.attacking and self.attack_cooldown == 0:
-            if self.state == 'punch':  # For punch, make cooldown almost negligible
-                self.state = 'punch'
-                self.attack_cooldown = 1  # Very short cooldown
-            else:
-                self.state = random.choice(['kick', 'punch'])
+            self.state = random.choice(['kick', 'punch'])
             self.index = 0
             self.attacking = True
             if self.state != 'punch':  # Keep some cooldown for kick if needed
-                self.attack_cooldown = 1
+                self.attack_cooldown = 5
 
     def move_left(self):
         self.rect.x -= self.speed
@@ -190,6 +187,16 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom > SCREEN_HEIGHT - GROUND_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT - GROUND_HEIGHT
             self.velocity_y = 0
+
+        # Check for enemy collisions
+        for enemy in self.game_state.enemies:
+            if pygame.sprite.collide_rect(self, enemy):
+                # Player hits enemy
+                if self.attacking:
+                    enemy.take_damage(self.base_damage)
+                # Enemy hits player
+                else:
+                    self.take_damage(enemy.base_damage)
         
         if DEBUG:
             print(f"Player pos after collision: {self.rect.x, self.rect.y}")
