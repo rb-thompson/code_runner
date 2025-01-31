@@ -2,6 +2,7 @@ import pygame
 import random
 from .player import Player                  # player
 from .enemy import Enemy                    # foes
+from .coffee import Coffee                  # coffee bonus
 from .particle import Particle              # particle emitter
 from ..gui.status_bar import StatusBar      # status bar
 from .background import Background          # background scrolling
@@ -27,6 +28,11 @@ class GameState:
         self.enemy_spawn_interval = 180  # Spawn an enemy every 3 seconds at 60 FPS
         self.difficulty_level = 1  # Initial difficulty level
 
+        self.coffees = pygame.sprite.Group()
+        self.coffee_spawn_chance = 0.3  # 30% chance to spawn coffee when an enemy is defeated
+        self.bonus_timer = 0  # Timer for speed bonus
+        self.bonus_duration = 600  # 10 seconds at 60 FPS
+
         # Initialize music
         pygame.mixer.init()
         pygame.mixer.music.load('assets/audio/gameplay_track.mp3')
@@ -40,6 +46,27 @@ class GameState:
         self.particles.update()
         self.generate_enemies()
         self.update_difficulty()
+        self.check_coffee_pickup()
+        self.apply_bonus()
+
+    def check_coffee_pickup(self):
+        for coffee in self.coffees:
+            if pygame.sprite.collide_rect(self.player, coffee):
+                # Player picks up coffee
+                self.player_picked_coffee()
+                coffee.kill()
+
+    def player_picked_coffee(self):
+        print("Player picked up coffee, speed bonus activated!")
+        self.player.speed_bonus = True
+        self.bonus_timer = self.bonus_duration
+
+    def apply_bonus(self):
+        if self.bonus_timer > 0:
+            self.bonus_timer -= 1
+            if self.bonus_timer == 0:
+                self.player.speed_bonus = False
+                print("Speed bonus ended!")
 
     def update_difficulty(self):
         # Example of how difficulty might increase over time
@@ -119,10 +146,19 @@ class GameState:
         print("Enemy health is <= 0, should trigger particles")
         self.emit_particles(enemy.rect.center, 'smoke', 
                     colors=[(105, 252, 83), (255, 255, 255), (255, 255, 255)], 
-                    size_range=(1, 10), 
-                    count=40)
-        self.player.add_experience(5)
-        enemy.kill()  # Add this to remove the enemy from the game after the particle effect
+                    size_range=(1, 5), 
+                    count=20)
+        # Award experience for defeating the enemy
+        self.player.add_experience(10)
+        # Chance to spawn coffee
+        if random.random() < self.coffee_spawn_chance:
+            self.spawn_coffee(enemy.rect.centerx, enemy.rect.centery)
+        enemy.kill()
+
+    def spawn_coffee(self, x, y):
+        coffee = Coffee(x, y)
+        self.coffees.add(coffee)
+        self.all_sprites.add(coffee)
 
     def add_experience(self, amount):
         self.experience += amount

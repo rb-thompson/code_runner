@@ -39,3 +39,6 @@ BACKGROUND_IMAGE = os.path.join(ASSETS_PATH, 'background', 'background.png')
 
 # Enemy Sprite Sheets
 CODE_BUG_IDLE_SHEET = os.path.join(ASSETS_PATH, 'enemies', 'code_bug_sheet.png')
+
+# Player Rewards
+COFFEE_SPRITE_SHEET = os.path.join(ASSETS_PATH, 'items', 'coffee_sprite_sheet.png')

@@ -30,6 +30,9 @@ class Player(pygame.sprite.Sprite):
         self.jump_strength = -25
         self.gravity = 1
         self.speed = 10
+        self.normal_speed = self.speed
+        self.speed_bonus = False
+        self.bonus_speed = self.speed * 1.5  # 50% speed increase
 
         # Attack mechanics
         self.attacking = False
@@ -156,12 +159,18 @@ class Player(pygame.sprite.Sprite):
                 self.attack_cooldown = 5
 
     def move_left(self):
-        self.rect.x -= self.speed
-        self.facing_right = False  # Update facing direction
+        if self.speed_bonus:
+            self.rect.x -= self.bonus_speed
+        else:
+            self.rect.x -= self.speed
+        self.facing_right = False
 
     def move_right(self):
-        self.rect.x += self.speed
-        self.facing_right = True  # Update facing direction
+        if self.speed_bonus:
+            self.rect.x += self.bonus_speed
+        else:
+            self.rect.x += self.speed
+        self.facing_right = True
 
     def check_collisions(self):
         if DEBUG:
