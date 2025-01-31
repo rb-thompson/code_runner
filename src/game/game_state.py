@@ -95,11 +95,11 @@ class GameState:
         self.status_bar.draw(screen)
         self.enemies.draw(screen)
         # DEBUG: Activate hitboxes for troubleshooting and testing
-        for platform in self.platforms:
-            pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
-            pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
-            for enemy in self.enemies:
-                pygame.draw.rect(screen, (0, 0, 255), enemy.rect, 2)  # Blue outline for enemies
+        # for platform in self.platforms:
+        #     pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
+        #     pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
+        #     for enemy in self.enemies:
+        #         pygame.draw.rect(screen, (0, 0, 255), enemy.rect, 2)  # Blue outline for enemies
 
     # Particle emitter
     def emit_particles(self, pos, particle_type, colors=None, size_range=(5, 10), count=10):
