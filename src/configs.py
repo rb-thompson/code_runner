@@ -15,6 +15,7 @@ PLAYER_COLOR = (255, 255, 255)   # White for the player (placeholder)
 PLAYER_WIDTH = 150
 PLAYER_HEIGHT = 200
 GROUND_HEIGHT = 50
+ENEMY_HEIGHT = 200
 
 HEALTH_BAR_WIDTH = 200
 HEALTH_BAR_HEIGHT = 20
@@ -34,3 +35,6 @@ PLAYER_SPRITE_SHEET = os.path.join(ASSETS_PATH, 'sprites', 'player_sprite_sheet.
 KICK_SPRITE_SHEET = os.path.join(ASSETS_PATH, 'sprites', 'player_kick_sheet.png')
 PUNCH_SPRITE_SHEET = os.path.join(ASSETS_PATH, 'sprites', 'player_punch_sheet.png')
 BACKGROUND_IMAGE = os.path.join(ASSETS_PATH, 'background', 'background.png')
+
+# Enemy Sprite Sheets
+CODE_BUG_IDLE_SHEET = os.path.join(ASSETS_PATH, 'enemies', 'code_bug_sheet.png')

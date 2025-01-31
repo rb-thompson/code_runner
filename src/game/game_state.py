@@ -1,11 +1,13 @@
 import pygame
 import random
-from .player import Player
-from .particle import Particle
-from ..gui.status_bar import StatusBar
-from .background import Background
-from .platform import Platform
-from ..configs import *
+from .player import Player                  # player
+from .enemy import Enemy                    # foes
+from .particle import Particle              # particle emitter
+from ..gui.status_bar import StatusBar      # status bar
+from .background import Background          # background scrolling
+from .platform import Platform              # platform generation
+from ..configs import *                     # configuration
+import pygame.mixer                         # audio 
 
 class GameState:
     def __init__(self):
@@ -19,12 +21,45 @@ class GameState:
         self.player.health = 100
         self.last_platform = None
         self.particles = pygame.sprite.Group()
+        
+        self.enemies = pygame.sprite.Group()
+        self.enemy_spawn_timer = 0
+        self.enemy_spawn_interval = 180  # Spawn an enemy every 3 seconds at 60 FPS
+        self.difficulty_level = 1  # Initial difficulty level
+
+        # Initialize music
+        pygame.mixer.init()
+        pygame.mixer.music.load('assets/audio/gameplay_track.mp3')
+        pygame.mixer.music.set_volume(0.5)  # Set volume to 50%
+        pygame.mixer.music.play(-1)  # -1 means loop indefinitely
 
     def update(self):
         self.all_sprites.update()
         self.background.update()
         self.generate_platforms()
         self.particles.update()
+        self.generate_enemies()
+        self.update_difficulty()
+
+    def update_difficulty(self):
+        # Example of how difficulty might increase over time
+        # Adjust this logic to fit the game's progression
+        if self.player.experience > 100 * self.difficulty_level:
+            self.difficulty_level += 1
+            # Decrease spawn interval to increase difficulty
+            self.enemy_spawn_interval = max(60, self.enemy_spawn_interval - 20)
+            print(f"Difficulty increased to level {self.difficulty_level}. Spawn interval now: {self.enemy_spawn_interval}")
+
+    def generate_enemies(self):
+        self.enemy_spawn_timer += 1
+        if self.enemy_spawn_timer >= self.enemy_spawn_interval:
+            self.enemy_spawn_timer = 0  # Reset timer
+            # Spawn enemy at ground level
+            x = SCREEN_WIDTH
+            y = SCREEN_HEIGHT - GROUND_HEIGHT - ENEMY_HEIGHT  # Adjust based on enemy sprite height
+            enemy = Enemy(x, y, 'code_bug')
+            self.enemies.add(enemy)
+            self.all_sprites.add(enemy)
 
     def generate_platforms(self):
         if not self.platforms or self.platforms.sprites()[-1].rect.right < SCREEN_WIDTH - 600:
@@ -58,10 +93,11 @@ class GameState:
         self.all_sprites.draw(screen)
         self.particles.draw(screen)
         self.status_bar.draw(screen)
+        self.enemies.draw(screen)
         # DEBUG: Activate hitboxes for troubleshooting and testing
-        # for platform in self.platforms:
-        #     pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
-        #     pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
+        for platform in self.platforms:
+            pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
+            pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
 
     # Particle emitter
     def emit_particles(self, pos, particle_type, colors=None, size_range=(5, 10), count=10):
