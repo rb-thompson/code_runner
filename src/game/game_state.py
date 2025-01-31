@@ -3,6 +3,7 @@ import random
 from .player import Player                  # player
 from .enemy import Enemy                    # foes
 from .coffee import Coffee                  # coffee bonus
+from .coin import Coin                      # coin rewards
 from .particle import Particle              # particle emitter
 from ..gui.status_bar import StatusBar      # status bar
 from .background import Background          # background scrolling
@@ -28,6 +29,7 @@ class GameState:
         self.enemy_spawn_interval = 180  # Spawn an enemy every 3 seconds at 60 FPS
         self.difficulty_level = 1  # Initial difficulty level
 
+        self.coins = pygame.sprite.Group()
         self.coffees = pygame.sprite.Group()
         self.coffee_spawn_chance = 0.3  # 30% chance to spawn coffee when an enemy is defeated
         self.bonus_timer = 0  # Timer for speed bonus
@@ -48,6 +50,7 @@ class GameState:
         self.update_difficulty()
         self.check_coffee_pickup()
         self.apply_bonus()
+        self.coins.update()
 
     def check_coffee_pickup(self):
         for coffee in self.coffees:
@@ -113,7 +116,7 @@ class GameState:
             if event.type == pygame.QUIT:
                 return False
         return True
-
+    
     def draw(self, screen):
         self.background.draw(screen)
         pygame.draw.rect(screen, GROUND_COLOR, (0, SCREEN_HEIGHT - GROUND_HEIGHT, SCREEN_WIDTH, GROUND_HEIGHT))
@@ -121,12 +124,14 @@ class GameState:
         self.particles.draw(screen)
         self.status_bar.draw(screen)
         self.enemies.draw(screen)
+        self.coins.draw(screen)
         # DEBUG: Activate hitboxes for troubleshooting and testing
-        # for platform in self.platforms:
-        #     pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
-        #     pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
-        #     for enemy in self.enemies:
-        #         pygame.draw.rect(screen, (0, 0, 255), enemy.rect, 2)  # Blue outline for enemies
+        for platform in self.platforms:
+            pygame.draw.rect(screen, (0, 255, 0), platform.rect, 1)  # Green for platforms
+        pygame.draw.rect(screen, (255, 0, 0), self.player.rect, 1)  # Red for player
+        
+        for enemy in self.enemies:
+            pygame.draw.rect(screen, (0, 0, 255), enemy.rect, 2)  # Blue outline for enemies
 
     # Particle emitter
     def emit_particles(self, pos, particle_type, colors=None, size_range=(5, 10), count=10):
@@ -153,12 +158,27 @@ class GameState:
         # Chance to spawn coffee
         if random.random() < self.coffee_spawn_chance:
             self.spawn_coffee(enemy.rect.centerx, enemy.rect.centery)
+        # Spawn coins
+        self.spawn_coins(enemy.rect.centerx, enemy.rect.centery)
         enemy.kill()
 
     def spawn_coffee(self, x, y):
         coffee = Coffee(x, y)
         self.coffees.add(coffee)
         self.all_sprites.add(coffee)
+
+    def spawn_coins(self, x, y):
+        num_coins = random.randint(1, 5)  # Random number of coins between 1-5
+        for _ in range(num_coins):
+            # Offset each coin slightly to give the effect of them jumping out
+            offset_x = random.randint(-20, 20)
+            coin = Coin(x + offset_x, y)
+            self.coins.add(coin)
+            self.all_sprites.add(coin)
+
+    def player_collected_coin(self):
+        self.player.add_coins(1)
+        print(f"Player collected a coin! Total coins: {self.player.coins}")
 
     def add_experience(self, amount):
         self.experience += amount

@@ -172,6 +172,15 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.speed
         self.facing_right = True
 
+    def add_coins(self, amount):
+        self.coins += amount
+        print(f"Player now has {self.coins} coins!")
+
+    def collect_coin(self, coin):
+        self.add_coins(1)  # Add a coin to the player's balance
+        coin.kill()  # Remove the coin from the game
+        print(f"Player collected a coin! Total coins: {self.coins}")
+
     def check_collisions(self):
         if DEBUG:
             print(f"Player pos before collision: {self.rect.x, self.rect.y}")
@@ -209,6 +218,11 @@ class Player(pygame.sprite.Sprite):
             if attack_rect.colliderect(enemy.rect):
                 if self.attacking:
                     enemy.take_damage(self.base_damage)
+            
+        # Check for coin collisions
+        for coin in self.game_state.coins:
+            if pygame.sprite.collide_rect(self, coin):
+                self.collect_coin(coin)
         
         if DEBUG:
             print(f"Player pos after collision: {self.rect.x, self.rect.y}")
